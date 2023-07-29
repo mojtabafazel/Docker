@@ -1,9 +1,7 @@
 version: '3.8'
-
 volumes:
   es_data:
     name: es_data
-
 networks:
   http_network:
     external: true
@@ -34,7 +32,7 @@ services:
     volumes:
       - ./logstash/pipeline/logstash-nginx.config:/usr/share/logstash/pipeline/logstash-nginx.config
       - ./logstash/nginx.log:/home/nginx.log
-     ports:
+    ports:
       - "5000:5000/tcp"
       - "5000:5000/udp"
       - "5044:5044"
