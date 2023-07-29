@@ -42,5 +42,4 @@ services:
     ports:
       - 8000:80
     networks:
-      - wp_net
-~                                                                                                                                                                                                                                                                                                                                                                        
+      - wp_net                                                                                                                                                                                                                                                                                                                                                                      
