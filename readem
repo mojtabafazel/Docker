@@ -1,0 +1,61 @@
+openssl req -x509 -nodes -newkey \
+rsa:4096 -days 3650 \
+keyout ./key.pem \
+subj "/C=IR/ST=Iran/L=Tabriz/O=docker/OU=IT/CN=repo.shoniz.ir/emailAddress=mail@gmail.com" \
+addext "subjectAltName = DNS:repo.shoniz.ir" \
+out ./cert.pem
+
+- openssl x509 -text -noout -in .cert.pem
+
+
+openssl req \
+  -newkey rsa:4096 -nodes -sha256 -keyout ./key.pem \
+  -addext "subjectAltName = DNS:devoker.ir" \
+  -x509 -days 365 -out ./cert.pem
+
+
+https://medium.com/@bjammal/install-nexus-repository-manager-behind-nginx-reverse-proxy-using-docker-18f745f207ee
+
+
+
+version: '3.6'
+
+volumes:
+  nginx-data:
+    name: nexus-data
+    external: false
+  nexus_data:
+    name: nexus_data
+    external: false
+
+networks:
+  tiket_net:
+    name: tiket_net
+    external: true
+
+
+services:
+
+  nginx:
+    image: nginx:1.23.2
+    container_name: nginx
+    restart: always
+    volumes:
+      - "./nginx-data/conf.d":/etc/nginx/conf.d
+      - "./nginx-data/certs":/etc/nginx/certs
+    networks:
+      - tiket_net
+    ports:
+      - 80:80
+      - 443:443
+
+  nexus:
+    image: sonatype/nexus3:3.43.0
+    volumes:
+      - nexus_data:/nexus-data
+
+    container_name: nexus
+    restart: always
+    networks:
+      - tiket_net
+
