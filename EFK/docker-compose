@@ -1,0 +1,23 @@
+services:
+  elasticsearch:
+    image: elasticsearch:7.17.23
+    environment:
+      discovery.type: single-node
+    ports:
+      - 9200:9200
+      - 9300:9300
+
+  fluentd:
+    build: ./fluentd
+    volumes:
+      - ./fluentd/conf:/fluentd/etc
+      - ./logs:/logs
+    ports:
+      - 8080:8080
+
+  kibana:
+    image: kibana:7.17.23
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+    ports:
+      - 5601:5601
